@@ -1,0 +1,21 @@
+% Chapter 1
+
+\chapter{Introduction} % Main chapter title
+
+\label{Chapter1} % For referencing the chapter elsewhere, use \ref{Chapter1}
+
+\lhead{Chapter 1. \emph{Introduction}} % This is for the header on each page - perhaps a shortened title
+
+%----------------------------------------------------------------------------------------
+
+
+%----------------------------------------------------------------------------------------
+With the world-spread popularity of smart devices, including smart phones, tablets and numerous virtual reality devices, the mobile user traffic demand is increasing exponentially, unlike the traditional voice service generations ago. Driven by these tremendous data consumption and higher QoS (quality of service) requirement, the wireless communication groups, including academics and industrials, devote themselves to upgrade the cellular networks by looking into the user demand dynamics and proposing brand new technologies.
+
+On one hand, with the amazing development of the big data technology these years, operators are coming to realize the increasing importance of the recorded data from their own networks. Thus, more and more real data are put into investigation by the operators themselves or contributed to related researchers aiming to reveal the inherit pattern of mobile user activities and mobile traffic distribution. On the other hand, along with the 3GPP releases, many researchers are working on new architecture or new algorithms to increase the network capacity and improving the QoE (quality of experience) of mobile subscribers.
+
+On the real data examination part, the investigated objectives include traffic, base stations and mobile users, along with their spatial and temporal distributions. For example, 
+
+
+
+
