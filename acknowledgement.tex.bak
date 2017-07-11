@@ -1,0 +1,24 @@
+\setstretch{1.3} % Reset the line-spacing to 1.3 for body text (if it has changed)
+
+ \acknowledgements{\addtocontents{toc}{\vspace{1em}} % Add a gap in the Contents, for aesthetics
+
+
+%First of all, i would like to express my sincere gratitude to my thesis advisor Christophe Moy, SCEE team member and contributor to our project Yves Louët and head of SCEE team Jacques Palicot for giving me the chance to pursuit research in a warm and productive environment. Their guidance and friendship made my 3 years in Rennes a great life experience. I wish also to thank Carlos Bader, Amor Nakfha, Pascal Cotret and all professors of CentraleSupélec-Rennes.
+%
+%I wish to thank especially to my office mates Marwa Chafii and Lamarana Diallo for their helps and kindness. In addition to this, special thanks to all my friends Vincent Savaux, Malek Naoues, Yacine Abdellaoui, Jerome Manceau, Amine Kacete, Vincent Gouldieff, Samba Traore, Sumit Darak, Navikkumar Modi, Xiguang Wu, Oussama Lazrak, Quentin Bodinier, Abir Amri and all fellows in CentraleSupélec-Rennes.
+
+
+I would like to thank Christophe Moy and Philippe Mary, my thesis advisors, and Jacques Palicot, head of SCEE department, for giving me the chance to pursue research in a warm and productive environment. Their helpful comments, corrections and critical minds guided me all along this work providing me with a certain amount of independence. The fruitful conversations we had during this period have helped me develop the thematic outline for this thesis. I am very grateful for their motivation, guidance and patience. Their guidance and friendship made my 3 years in Rennes a great life experience. 
+
+I would also like to extend my gratitude to the SCEE members: Carlos Bader, Amor Nakfha, Yves Louet, Pascal Cotret and all professors of CentraleSupélec, Rennes, France. I would like to thank all the members of TEPN project from CominLabs for their fruitful discussions and suggestions. I extend my sincere thanks to Karine Bernard, Jeannine Hardy and Emilie Gesnys for their administrative support.
+
+Moreover, along these years, I had the pleasure to work with very stimulating and friendly teams. I would like to thank Laura Melian-Gutierrez and Ivan Pérez-Álvarez, from IDeTIC, Universidad de Las Palmas de Gran Canaria, Spain, and as well as Sumit Darak, from Department of Electronics and Communication Engineering, IIIT-Delhi, India, for all the discussions and guidance.
+
+I wish to thank especially to my current and previous office mates Quentin Bodinier, Rémi Bonnefoi, Malek Naoues, Marwa Chaffi, Vincent Gouldieff, Lilian Besson, Muhammad Abdul Wahab, Rami Othman, Yifan Zhou, Xiguang Wu, Oussama Lazrak, Abir Amri, Vincent Savaux, Eren Unlu, Jerome Manceau, Samba Traore, Lamarano Mamadou Diallo, Hussein Kobeissi and all fellows in CentraleSupélec-Rennes for their help and kindness. 
+
+I am thankful to the jury members of my thesis committee. I would like to thank Prof. Visa Koivunen and Prof. Samson Lasaulce, for reviewing this Ph.D. work and providing me with useful comments and suggestions. I would also like to thank Prof. Damien Ernst, Dr. Emilie Kaufmann and my Ph.D. supervisors, for participating to the committee of my PhD defense. I thank them all for their valuable time and suggestions.
+
+Finally, I would like to thank my family for their unconditional support and sacrifices. My mother and father have always been my source of inspiration and they always encouraged me for better education. I thank my wife (Dipal Modi) for her constant support, encouragement and understanding. I thank all my relatives and friends (Hrishikesh Deshpande, Deepak Subramanian, Yogesh Karpate and all my friends) who indirectly contributed in my well-being and this work.
+
+
+}

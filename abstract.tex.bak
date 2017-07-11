@@ -1,0 +1,33 @@
+%\lhead{\emph{Abstract}} % Set the left side page header to "Contents"
+%
+%\textsc{\LARGE Abstract}\\[0.2cm] 
+
+%
+%\clearpage % Start a new page
+%\lhead{\emph{Résume}} % Set the left side page header to "Résume"
+%
+%\textsc{\LARGE Résume}\\[0.2cm] 
+
+\chapter*{Abstract} % Main chapter title
+
+\mtcaddchapter % ADDED
+\label{Abstract} % For referencing the chapter elsewhere, use \ref{Chapter1} 
+
+\lhead{Abstract}
+% This is for the header on each page - perhaps a shortened title
+
+
+Future cellular network technologies are targeted at delivering self-organizable and ultra-high capacity networks, while reducing their energy consumption. This thesis studies intelligent spectrum and topology management through cognitive radio techniques to improve the capacity density and Quality of Service (QoS) as well as to reduce the cooperation overhead and energy consumption. This thesis investigates how reinforcement learning can be used to improve the performance of a cognitive radio system. 
+%Decision making process in most wireless systems today, including most cognitive radio techniques such as opportunistic spectrum access, largely depends on instantaneous measurement. %The purpose of this work is to exploit the historical information the cognitive radio device has learned through the interactions with the unknown environment. 
+
+
+In this dissertation, we deal with the problem of opportunistic spectrum access in infrastructure-less cognitive networks. We assume that there is no information exchange between users, and they have no knowledge of channel statistics and other user's actions. This particular problem is designed as multi-user restless Markov multi-armed bandit framework, in which multiple users collect a priori unknown reward by selecting a channel. The main contribution of the dissertation is to propose a learning policy for distributed users, that takes into account not only the availability criterion of a band but also a quality metric linked to the interference power from the neighboring cells experienced on the sensed band. We also prove that the policy, named distributed restless QoS-UCB (RQoS-UCB), achieves at most logarithmic order regret. Moreover, numerical studies show that the performance of the cognitive radio system can be significantly enhanced by utilizing proposed learning policies since the cognitive devices are able to identify the appropriate resources more efficiently.
+
+This dissertation also introduces a reinforcement learning and transfer learning frameworks to improve the energy efficiency (EE) of the heterogeneous cellular network. Specifically, we formulate and solve an energy efficiency maximization problem pertaining to dynamic base stations (BS) switching operation, which is identified as a combinatorial learning problem, with restless Markov multi-armed bandit framework. Furthermore, a dynamic topology management using the previously defined algorithm, RQoS-UCB, is introduced to intelligently control the working modes of BSs, based on traffic load and capacity in multiple cells. Moreover, to cope with initial reward loss and to speed up the learning process, a transfer RQoS-UCB policy, which benefits from the transferred knowledge observed in historical periods, is proposed and provably converges. Then, proposed dynamic BS switching operation is demonstrated to reduce the number of activated BSs while maintaining an adequate QoS. Extensive numerical simulations demonstrate that the transfer learning significantly reduces the QoS fluctuation during traffic variation, and it also contributes to a performance jump-start and presents significant EE improvement under various practical traffic load profiles.
+
+ %It also demonstrates that the TRQoS-UCB and RQoS-UCB algorithms can significantly reduce the total energy consumption of cellular network, e.g., we estimate up to $70$\% potential energy savings based on a real traffic profile.
+ 
+Finally, a proof-of-concept is developed to verify the performance of proposed learning policies on a real radio environment and real measurement database of HF band. Results show that proposed multi-armed bandit learning policies using dual criterion (e.g. availability and quality) optimization for opportunistic spectrum access is not only superior in terms of spectrum utilization but also energy efficient.
+
+
+

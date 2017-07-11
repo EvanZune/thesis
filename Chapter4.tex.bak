@@ -1,0 +1,483 @@
+% Chapter 4
+
+\chapter{$\alpha$-Stable Distribution in Cellular Networks: Connecting the Dots} % Main chapter title
+\minitoc
+\label{Chapter4} % For referencing the chapter elsewhere, use \ref{Chapter1}
+
+\lhead{Chapter 4. \emph{$\alpha$-Stable Distribution in Cellular Networks}} % This is for the header on each page - perhaps a shortened title
+As we reviewed in Chapter \ref{Chapter2}, clustering phenomenon is widespread in cellular networks. For example, the spatial-temporal distribution of the traffic demand and the spatial distribution of BSs. Clustering means that mobile users or network deployment tend to generate traffic or be located in the similar time or space. That's to say, the densities of traffic demand and network deployment are highly skewed temporally or spatially, which draws forth the necessity of characterizing the density distribution of different metrics. Above that, it's also very important to dig into the cause of these clustering phenomenon and uncover the relationship between different phenomenons. This  will be our main topic in this chapter.
+
+In detail, this chapter will be divided into six sections. Firstly, we will give a brief introduction on this topic in Section \ref{sec4-intro}, including the background and related works, followed by our approach and contributions. After that, the mathematical preliminary will be presented in Section \ref{sec4-math}, where different candidate distributions for characterizing the clustering nature of traffic and BS deployment are introduced. Then in Section \ref{sec4-bsden}, \ref{sec4-trafden} and \ref{sec4-mim}, we try to analyze and find the most appropriate models for the spatial density of BS and user traffic demands, and the temporal distribution of mobile instant message (MIM) as an example, respectively. Finally, the discussion and conclusion are given in Section \ref{sec4-concl}.
+
+\section{Introduction} \label{sec4-intro}
+User, traffic and BS, are the three fundamentals of RAN in cellular networks. In detail, mobile users generate data traffic, and request it from BS, and BS replies through the air interface. Therefore, in order to characterize the cellular networks more accurately, it's necessary to investigate the statistical properties of mobile users, traffic demand and BS deployment, both temporally and spatially. Additionally, the relationship between these three dimensions are also very important for understanding the whole cellular networks.
+
+In this section, we will give a brief introduction on this topic. Firstly, the background for this work will be introduced. Secondly, we will present the related works in this literature and turn to our approach and contribution in the end.
+
+\subsection{Background}
+Cellular networks are becoming an inevitable data pipe for diverse mobile devices to access the intense content on the Internet. Understanding how base stations (BSs) are spatially deployed, could prominently facilitate the performance analyses of cellular networks, as well as the design of efficient networking protocols. For example, Poisson distribution is widely adopted to characterize the spatial distribution of BSs, and leads to a tractable approach to calculate the coverage probability and rate distribution in cellular networks, by taking advantage of a PPP based theory (i.e., stochastic geometry) \cite{andrews2011tractable,haenggi2009stochastic}. However, the modeling accuracy of Poisson distribution has been recently questioned \cite{zhou2014two}. Consequently, in order to reduce the modeling error between Poisson distributed BSs and the practical distributed ones \cite{deng2014ginibre}, some variants of PPP have been exploited to obtain precise analysis results. On the other hand, the actual deployment of BSs in long term is highly correlated with human activities \cite{zhou2013human,zhang2013base}. Humans tend to live together, and their social behaviors would lead to traffic hotspots \cite{zhang2013base}, thus causing BSs to be more tensely deployed in certain areas as clusters. Furthermore in a wider view, according to an assumption named ``preferential attachment" \cite{barabasi1999emergence}, Barab\'asi \textit{et al.} argues that many large networks grow to be heavy-tailed. This claim and reasoning make heavy-tailed distributions appear to be more suitable to precisely characterize the spatial density of clusteringly distributed BSs.
+
+On the other hand, traffic demand variation is another important issue in cellular networks, since it's highly related to the interference management and resource allocation strategy. More importantly, the energy efficiency of communication systems is directly determined by the traffic volume level of the coverage area, which highlights the urgency of fine-grain characterization of mobile user traffic in cellular networks. In this point of view, it's important and necessary to take an in-depth investigation of the traffic demand in the widespread cellular networks, on both temporal and spatial perspectives. Specifically, the spatial density is a good estimator of the two-dimensional distribution of traffic demand in cellular networks, though losing some of the location information. Meanwhile, in order to initialize, the analyzing process of data traffic is in urgent need of real measurement. With this motivation, we choose to investigate the traffic density (spatially and temporally) based on real measurement.
+
+Specifically, the probes deployed in BS sides are able to collect the total traffic volume which get through it to core networks or mobile users. In this aspect, in order to obtain the density description, we assume that the traffic density within a BS coverage area is invariant while distinct BSs may differs on that metric. Furthermore, as the number of small cells are increasing rapidly, the coverage area of each cells are going to be smaller and smaller, which makes our invariant traffic density within one cell reasonable. By this method, we are able to obtain the real traffic density across the cellular networks.
+
+Moreover, the increasing deployment of dense small cells and multi-tier networking heterogeneity causes the cellular network topology much more complicated than before. Although there have already existed numerous substantial works about the traffic spatial distribution and BSs deployment, the relevant statistical models derived from the former cellular architecture may be impractical to fully reflect the ongoing network evolution. Therefore, by means of analyzing the intrinsic relationship between BSs density and traffic spatial density, we aim to go beyond the evolutionary changing of network facility, and obtain a deep-level understanding on the fundamental patterns of cellular network evolution in the long term. Previous work like \cite{zhou2015spatial}, with less BSs and traffic records, adopted saturation model to describe the correlations between the two quantities (i.e., BSs density and traffic density) in urban areas. This result, however, conflicts with the general awareness that BSs distribution and traffic distribution incline to vary consistently.
+
+In addition to the spatial pattern of BSs and traffic demand, the temporal characteristic of user traffic also plays a key role in the overall performance of cellular networks, for example on the average latency metric. As we described in Chapter \ref{Chapter2}, the distribution of traffic demand on time dimension also exhibits some extent of clustering effect. However, the present study only reveals this phenomenon but lacks an in-depth statistical characterization of it, which could be very useful for tangible analysis and practical simulation. Therefore, in this chapter we try to fix this problem, in a simple way (i.e., temporal density distribution).
+
+However, due to the limitation of real data measurement, we are not able to collect specific traffic records for each individual. In fact, as we described in Chapter \ref{Chapter2}, the temporal pattern of individual traffic volume is very various which makes it too difficult to predict and analyze. As a compromise, the total volume of BSs are recorded by the probes on the interface between CN and BS, which provides another option for analyzing the temporal variation of traffic demand on the BS level. Therefore, only the aggregated traffic is possible for investigation in our works, which is more coarse-grained but still enough to reflect the temporal clustering nature of traffic demand. Accordingly, besides the we conduct a typical investigation with the MIM case as an example, to reveal the internal properties of mobile traffic on the dimension of time.
+
+\subsection{Related Works}
+Fortunately, there have already existed substantial works towards discovering the distribution of BSs in cellular networks from various practical measurements. In the earliest stages, a two-dimensional hexagonal grid model \cite{andrews2011tractable} was used and implied that BSs were spatially uniformly deployed, which is obviously far from the real scenarios. In next stages, Poisson distribution \cite{andrews2011tractable,haenggi2009stochastic} was found to be able to roughly match the realistic BS deployment in cellular networks, while providing tractable analysis conclusions. Meanwhile, due to the ever-increasing deployment of new BSs, cell sizes in on-operating cellular networks are becoming smaller and more irregular \cite{andrews2012femtocells}. Therefore, variants of Poisson distributions (i.e., two-tier PPP \cite{zhang2013base} and Poisson clustering process \cite{chun2015modeling}) are proposed, so as to better reflect the clustering property of BSs. However, these Poisson-based distributions lack the foundation to understand the intrinsic characteristics of BSs' evolution together with the traffic dynamics motivated and impacted by the human social activities.
+
+As we presented in Chapter \ref{Chapter3}, there are a lot of work aiming to find the most appropriate model for spatial distribution of BSs in cellular networks. However, due to the disparity of different data set and distinctive performance evaluation metrics, the academia can hardly reach a consensus on this topic. In our previous work in \cite{zhou2015large}, to overcome the difficulty of lacking large amount of real data, we collected massive BS locations from an on-operating cellular networks to conduct a large-scale identification process on this issue. However, our conclusions find that maybe there is not a universal model for the spatial distribution of BSs in cellular networks, since the scenarios vary for different areas and different types of BSs. Actually, the spatial modeling of BS locations is a trade-off between accuracy and tractability. For example, the PPP has the best tractability for performance evaluation in cellular networks since it provides a close-form description of many key metrics like coverage probability and transmission capacity. While, the completely random assumption of PPP models are clearly unrealistic for practical deployment. Therefore, after revealing these facts, it's more reasonable to consider this problem in a different view. In this chapter, we give up to find a most accurate model on two-dimension modeling and try to characterize the clustering feature of BS distribution in a more simple but direct way (i.e., the spatial density).
+
+Besides the spatial characterization of BSs, traffic demand is another important issue in this field. Actually, in early times, spatial distribution of cellular traffic, which is served by each BS in a specific time interval, was studied in \cite{gotzner1998spatial}. Regarding the state of art in this literature, Chapter \ref{Chapter2} gives a comprehensive review which reveals the clustering nature of traffic demand in spatial distribution. However, most of the works dealing with traffic distribution lacks a concrete mathematical description of the degree of clustering property. For example, with high non-uniformity across different cells, \cite{lee2014spatial} and \cite{klessig2014framework} adopted log-normal distribution to capture traffic density variability instead of traffic volume itself. Moreover, burstiness, long-range dependence (LRD) and heavy-tailed properties of broadband wired network traffic have been discovered, and ${\alpha}$-Stable model with the above three features was used in \cite{crovella1997self}, \cite{xiaohu2004testing}. The latest literature  \cite{li2015understanding}, first applied ${\alpha}$-Stable distribution to model aggregated traffic traces within BSs in the field of cellular networks. Besides traffic spatial distribution itself, its impact on BSs deployment cannot be ignored. In real network scenarios, the locations of BSs are usually coupled with the requirements of subscribers that often exhibit group users' behavior \cite{zhang2013base}.
+
+Apart from the spatial characterization, the temporal distribution of traffic demand also exhibits heavy-tailed phenomenons. For example, the traffic volume of an investigated BS in peak time is far more than that in midnight. That's to say, the traffic densities on time scale are various and can not be assumed as constant any more. Indeed, due to its apparent importance to the protocol design and performance evaluation of telecommunications networks, there have already existed some former works towards modeling the traffic in various networks. In fixed broadband networks, researchers showed that aggregate traffic traces demonstrate strong burstiness and could be modeled with $\alpha$-Stable models \cite{gallardo2000use,xiaohu2004testing}.
+
+As we mentioned in Chapter \ref{Chapter2}, the traffic volume on a BS or cell level exhibits a periodic pattern. However, it also lacks statistical description on the temporal density, i.e., a PDF characterization. On the other hand, the investigation over traffic characteristics of IM in wired Internet revealed heavy-tailed distribution phenomena in services like AIM (AOL Instant Messenger) and Windows Live Messenger \cite{xiao2007understanding,leskovec2008planetary}. Besides, nowadays MIM emerges as killer application for mobile Internet era, thus takes over large part of the overall traffic in cellular networks and can be chosen as a representative case for the temporal modeling of data traffic. Therefore, it is natural to raise a question, namely which one of the aforementioned models is more suitable for MIM traffic? Meanwhile, it remains doubtful whether cellular networks with distinct characteristics from fixed networks (e.g., more stringent constraints on radio resources, relatively expensive billing polices and different user behaviors due to mobility) \cite{li2014prediction} need a totally different traffic model?
+
+\subsection{Approach and Contributions}
+In order to characterize the clustering phenomenon of cellular networks statistically, firstly we need to choose the proper variable to represent the clustering nature. In this chapter, we adopt the density feature to achieve that, both spatially and temporally. Specifically, for the BS distribution, we examine the spatial density of BSs across a large selected area, and take it as a reasonable variable to reflect the clustering nature of BS deployment. Similarly, we calculate the average traffic density across the cellular networks on a time basis like one day or one week. Based on the empirical traffic density, we can fit various distribution candidates to show how the traffic demand is spatially clustered in cellular networks. On the other hand, for the temporal part, we take the mobile instant message (MIM) as an example to show the imbalance of user requests, which is highly related to human dynamics.
+
+In detail, for the first part in this chapter, we aim to re-examine the statistical pattern of BSs in cellular networks, and find the most accurate spatial density distribution of BSs. By taking advantage of large amount of realistic spatial deployment information of BSs from on-operating cellular networks, we compare the practical distribution of BSs in cellular networks with various representative candidates, including Poisson distribution and some other heavy-tailed distributions (e.g., generalized Pareto distribution, log-normal distribution, Weibull distribution, and $\alpha$-Stable distribution). Interestingly, among the exploited distributions, $\alpha$-Stable distribution could most precisely fit the actual deployment of legacy BSs, which is also consistent with the traffic distribution in broadband and cellular networks \cite{crovella1997self,gallardo2000use}. In other words, the spatial distribution of BSs in cellular networks reflects the basic characteristics of traffic demands from users, and could partially exhibit the nature of human activities. We believe that this new finding could contribute to the understanding of the evolution of cellular networks as well as the relevant society development.
+
+For the second part, we try to characterize the spatial density of traffic demand in cellular networks. Similarly, as we depicted in Chapter \ref{Chapter2}, the traffic demand of mobile users are also aggregately distributed. Therefore, we conduct the same fitting process for BS density distribution, and derive the most appropriate statistical model for traffic density. Surprisingly, the traffic density based on another real data set also reflects heavy-tailed properties, and can be well approximated by $\alpha$-Stable distribution with different parameters. This result leads us to investigate the statistical relationship between BS density and traffic density in cellular networks, which will be presented in this chapter. Furthermore, we find that there is kind of linear dependence between these two variables, and the slope of this linear formulation can be adopted as an indicator for the maturity of cellular networks.
+
+In the third part, the temporal analysis of traffic demand is presented, based on a typical example on MIM. Like the spatial density of BSs or traffic demand, we sampled the aggregated traffic of randomly chosen BS on temporal scale. Based on the real data, we conduct the fitting process with popular distribution candidates. Once again, the $\alpha$-Stable distribution gives the best fitting performance among all these distribution candidates. Furthermore, we try to illustrate the quantitative coincidence for aggregated traffic, and find that the general central limit theorem may be a good explanation for that.
+
+Conclusively, based on the practical BS deployment information of one on-operating cellular networks, we carried out a thorough investigation over the statistical pattern of BS density. Our study showed that the distribution of BS density exhibits strong heavy-tailed characteristics. Furthermore, we found that the widely adopted Poisson distribution severely diverges from the realistic distribution. Instead, $\alpha$-Stable distribution, which is also found in the traffic dynamics of broadband networks and cellular networks, most precisely match the practical one.
+
+Besides, we also find that the traffic density in cellular networks also exhibits strong heavy-tailed characteristics, and can be well approximated by $\alpha$-Stable distribution. Furthermore, considering the actual situation that BSs placement is deeply induced by traffic dynamics pattern, we reveal the suitability of applying linear regression model to display the statistical relationship between BSs density and traffic spatial density, which is different from the conclusions given by previous studies.
+
+On the other hand, the heavy-tailed phenomenon exists in the temporal aggregated traffic of BS in cellular networks, which can also be characterized by $\alpha$-Stable distribution. From this point of view, we can conclude that the BS deployment and user traffic distribution are highly correlated with each other, with strong basis from real measurement. Besides, along with the spatial dimension, the temporal analysis of traffic demand provides a comprehensive characterization on this fundamental issue.
+
+\section{Mathematical Preliminary} \label{sec4-math}
+In this section, we will introduce the mathematics for analyzing the spatial or temporal distribution of traffic demand in cellular networks. Before going to the detail, we first present a brief introduction of the heavy-tailed phenomenon in human dynamics. Since the traffic generated or the infrastructure deployed in cellular networks is kind of reflection of human activities, it's essential to know the basics of human dynamics which is highly connected to the heavy-tailed distribution.
+\subsection{Heavy-tailed Distribution}
+Actually, heavy-tailed phenomenon is a showcase of general imbalance, while its distribution is more skewed than others. For example, the economist Pareto found that 20\% of all people receive 80\% of all the income. Technically in probability theory, heavy-tailed distributions are probability densities function whose tails are not exponentially bounded and the mathematical definition is as follows:
+
+\begin{definition}
+The distribution of a random variable $X$ is said to be heavy-tailed if:
+\begin{equation}
+\lim_{x \to \infty}e^{\lambda x}Pr(X > x)=\infty,   for \quad \lambda > 0.
+\end{equation}
+\end{definition}
+
+Heavy-tailed distributions could be widely applied to explain a number of natural phenomena, like in human mobility \cite{gonzalez2008understanding} and the Internet topology \cite{faloutsos1999power}. Also for cellular networks which is highly related to human dynamics, heavy-tailed phenomenon is common for mobile user statistics. Actually, there exist many statistical distributions proving to be heavy-tailed. Among them, generalized Pareto (GP) distribution, Weibull distribution, and log-normal distribution belong to one-tailed ones with the probability density function (PDF) in closed-forms (see Table \ref{distribution}).
+
+For all these common heavy-tailed distributions, they are able to indicate very large values in extreme cases, which happens in the BS density or traffic demand in cellular networks. That's the reason why heavy-tailed distributions are adopted here to characterize the statistical properties of BS and traffic.
+\subsection{$\alpha$-Stable Distribution}
+Another famous heavy-tailed distribution is $\alpha$-Stable distribution, who manifests itself in the capability to characterize the distribution of normalized sums of a relatively large number of independent identically distributed random variables \cite{samorodnitsky1994stable}. However, $\alpha$-Stable distribution, with few exceptions, lacks a closed-form expression of the PDF, and is generally specified by its characteristic function.
+
+\begin{definition}
+	A random variable $X$ is said to obey the $\alpha$-Stable distribution if there are parameters $0<\alpha \leq 2$, $\sigma \geq 0$, $-1\leq \beta \leq 1$, and $\mu \in \mathcal{R}$ such that its characteristic function is of the following form:
+	\begin{equation}
+	\label{eq:cfun}
+	\begin{aligned}
+	&\phi(\omega)= E(\exp j\omega X)\\
+	&=\exp\left\{-\sigma^{\alpha} \vert\omega\vert^{\alpha} \left(1-j\beta(\text{sgn} (\omega))\Phi \right) + j\mu \omega \right\},	
+	\end{aligned}
+	\end{equation}
+	with $\Phi$ is given by
+	\begin{equation}
+	\Phi=\left\{
+	\begin{aligned}
+	& \tan \frac{\pi \alpha}{2}, \alpha\neq 1;\\
+	& -\frac{2}{\pi} \ln\vert\omega\vert, \alpha= 1.\\
+	\end{aligned}
+	\right.
+	\end{equation}
+	Here, the function $E(\cdot)$ represents the expectation operation with respect to a random variable. $\alpha$ is called the characteristic exponent and indicates the index of stability, while $\beta$ is identified as the skewness parameter. $\alpha$ and $\beta$ together determine the shape of the models. Moreover, $\sigma$ and $\mu$ are called scale and shift parameters, respectively. Specifically, if $\alpha=2$, $\alpha$-Stable distribution reduces to Gaussian distribution.
+\end{definition}
+
+Usually, it's challenging to prove whether a dataset follows a specific distribution, especially for $\alpha$-stable distribution without a closed-form expression for its PDF. Therefore, when a dataset is said to satisfy a specific distribution, it usually means the dataset is consistent with this hypothetical distribution and its corresponding properties. In other words, the validation needs to firstly estimate the unknown parameters from a given dataset, and then check the fitting error between the real distribution of the dataset and the estimated one \cite{xiaohu2004testing}.
+\vspace{-5pt}
+In this chapter, after initial examination of data description (heavy-tailed phenomenon), we choose heavy-tailed distributions (different types of distributions) for modeling the probability distribution of BS density or traffic demand. For comparison, exponential distribution or Poisson distribution are also used for different scenarios. Hereafter, we will present three different cases for modeling real data from cellular networks, spanning from BS deployment to traffic sparsity, and MIM aggregated traffic.
+
+\section{Base Station Density in Cellular Networks} \label{sec4-bsden}
+In this section, different with that in Chapter \ref{Chapter3}, we try to characterize the BS deployment on one-dimension way. Compare to previous works, stepping back from the spatial pattern modeling where results are not definite, we further examine the BS density distribution in cellular networks. As mentioned in previous chapters, BSs in urban cities tend to be deployed in clusters, which implies that the BSs density varies across the whole coverage area. In accordance with the hotspots with ever-growing heavy traffic, the corresponding BS density value can be very high, which makes its distribution to be heavy-tailed. Therefore, in order to characterize this realistic phenomenon, besides the traditional Poisson distribution, we choose several representative heavy-tailed distribution candidates in Table \ref{distribution}.
+
+\begin{table}[htbp]
+\centering
+  \caption{The List of Candidate Distributions.}
+  \renewcommand\arraystretch{1.5}
+    \begin{tabular}{l|c}
+    \toprule
+    Distribution & Probability Density Function \\
+    \midrule
+    Generalized Pareto (GP) & $ax^{-b}$ \\
+    Weibull                 & $abx^{b-1}e^{-ax^b}$ \\
+    Lognormal               & $\frac{1}{\sqrt{2\pi}bx}e^{-\frac{(\ln x-a)^2}{2b^2}}$ \\
+    %\vspace{10pt}
+    $\alpha$-Stable         & See Eq. \ref{eq:cfun}. \\
+    Poisson                 & $\frac{{\lambda}^k}{k!}e^{-\lambda}$ \\
+    \bottomrule
+    \end{tabular}%
+  \label{distribution}%
+\end{table}%
+
+\subsection{Data Description}
+\begin{figure*}
+	\centering
+	\subfigure[City A]
+	{ \label{fig:maps:a}
+		\includegraphics[width=.28\textwidth,height=.26\textwidth]{./Chapter4_Figures/hangzhou.jpg}}
+	\hspace{1em}
+	\subfigure[City B]
+	{ \label{fig:maps:b}
+		\includegraphics[width=.28\textwidth,height=.26\textwidth]{./Chapter4_Figures/ningbo.jpg}}
+	\hspace{1em}
+	\subfigure[City C]
+	{ \label{fig:maps:c}
+		\includegraphics[width=.28\textwidth,height=.26\textwidth]{./Chapter4_Figures/taizhou.jpg}}
+	\hspace{1in}
+	\caption{An illustration of the deployment of base stations in three typical cities with geographical landforms.}
+	\label{fig:maps}
+\end{figure*}
+
+In order to reach credible results, we collect a massive amount of practical data of BSs information from China Mobile in a well-developed eastern province of China. The collected dataset, containing over 47,000 BSs of GSM cellular networks and serving  over 40 million subscribers, encompasses all BS-related records like location information (i.e. longitude, latitude, etc.) and BS type (i.e. macrocell or microcell).
+
+Based on the coverage area and location information, we divide the dataset into disjoint subsets. Accordingly, we can classify the dataset as subsets of urban areas and rural areas, by matching the geographical landforms with local maps. In this letter, for simplicity of representation, we primarily take account of urban areas, and try to select one most precise spatial distribution for BS deployment from various well-known candidate models. Specifically, we choose three typical cities capable of fully reflecting the BS deployment phenomena of metropolis city, big city and medium city, respectively. In Table \ref{tb:bss}, we have summarized the detailed information of these selected areas. Meanwhile, we plot the BS deployment with the geographical landforms in Fig. \ref{fig:maps}, which demonstrates that most BSs are densely clustered while some others are more sparsely deployed.
+
+\vspace{-10pt}
+\begin{table}
+\centering
+\caption{The Dataset of BSs and the Related City Information.}
+\setlength\abovecaptionskip{-5pt}
+\setlength\belowcaptionskip{-5pt}
+\label{tb:bss}
+\begin{tabular}{l|c|c|c}
+\toprule
+Attributes & City A & City B & City C\\
+\midrule
+No. of BSs & 8826 & 5746 & 4613\\
+\hline
+City Area & 16,847 km\textsuperscript{2} & 9,816 km\textsuperscript{2} & 9,413 km\textsuperscript{2}\\
+\hline
+Population & 8.844 million & 7.639 million & 6.038 million\\
+\hline
+Description & Inland Provincial Capital & Coastal & Coastal\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{-6pt}
+\subsection{Fitting and Evaluation}
+In this section, we present the fitting results to the real data. \cite{paul2011understanding} shows that 10\% of the base stations experience roughly about 50-60\% of the aggregate traffic load, which implies that the spatial traffic dynamics in cellular networks exhibit heavy-tailed pattern with densely clustering characteristic. Accordingly, in order to fulfill the above nonuniform traffic demand, BSs in urban cities tend to be deployed in clusters as well. Intuitively, the BS spatial density distribution would be heavy-tailed just like the spatial traffic dynamics. Therefore, in order to characterize this realistic phenomenon, besides the traditional Poisson distribution, we choose several popular heavy-tailed candidates in Table \ref{tb:listpdf}.
+
+\begin{table}
+	\centering
+	\caption{The List of Candidate Distributions and Estimated Parameters in Fig. \ref{fig:city_b_log4}.}
+    \setlength\abovecaptionskip{-5pt}
+    \setlength\belowcaptionskip{-5pt}
+	\label{tb:listpdf}
+	\begin{tabular}{l|c|l}
+		\toprule
+		Distribution & PDF & Estimated Parameters \\
+		\midrule
+		\tabincell{l}{Generalized\\ Pareto (GP)} & $\frac{1}{b}(1+\frac{a}{b}x)^{-(1+\frac{1}{a})}$	& $a$=0.0488, $b$=3.3502 \\
+		\hline
+		Weibull & $pqx^{q-1}e^{-px^q}$ & \tabincell{l}{$p$=0.7285, $q$=0.8279}\\
+		\hline
+		Log-normal & $\frac{1}{\sqrt{2\pi}nx}e^{-\frac{(\ln x -m)^2}{2n^2}} $ & $m$=-0.1835, $n$=1.0483 \\
+		\hline
+		$\alpha$-Stable & \tabincell{l}{Closed form not always exists. \\Characteristic Function in Eq. \eqref{eq:cfun}.} & \tabincell{l}{$\alpha$=0.6207, $\beta$=1.0000 \\ $\sigma$=0.2053, $\mu$=0.0658} \\
+		\midrule
+		Poisson & $\frac{\lambda^{k}}{k!}e^{-\lambda}$ & $\lambda$=1.6759\\
+		\bottomrule
+	\end{tabular}		
+\end{table}
+
+Afterwards, based on the large amount of BS location data, we sample one certain city randomly with a fixed sample area size. Then, we compute the spatial density for different 10000 sample areas and obtain the empirical density distribution, by counting and sorting the number of BSs in each sample area. Next, we estimated the unknown parameters in candidate distributions (except $\alpha$-Stable distribution) using maximum likelihood estimation (MLE) methodology. For $\alpha$-Stable distribution, we estimate the relevant parameters using quantile methods \cite{mcculloch1986simple}, correspondingly build the model to generate the corresponding random variable, and finally compare its induced PDF with the exact (empirical) one.
+
+In the first place, we refer to City B as an example, and compute the PDF of BS density under the sample area size $4\times4$ km\textsuperscript{2}. After fitting the corresponding PDF to distributions in Table \ref{tb:listpdf}, we provide the comparison between the empirical BS density distribution with candidate ones in Fig. \ref{fig:city_b_log4} and Fig. \ref{fig:city_b_4}. As depicted in Fig. \ref{fig:city_b_4}, the statistical pattern of BSs obviously exhibits heavy-tailed characteristics. Besides, among all candidate distributions, $\alpha$-stable distribution most precisely match the empirical PDF. On the other hand, we provide the numerical comparison in Table \ref{tb:rmse}, in terms of root mean square error (RMSE). Indeed, the RMSE results in Table \ref{tb:rmse} show $\alpha$-stable distribution has the minimum RMSE value (0.0279) while Poisson distribution has the maximum one (0.2537), and once again strengthen this aforementioned conclusion. All of the estimated parameters of the fitted candidate distributions are also listed in Table \ref{tb:listpdf}.
+
+\begin{figure}
+\centering
+\includegraphics[trim=0mm 0mm 0mm 0mm,width=0.7\textwidth]{./Chapter4_Figures/b_4x4_loglog.eps}
+ \setlength\abovecaptionskip{0pt}
+ \setlength\belowcaptionskip{-5pt}
+\caption{The log-log comparison between practical BS density distribution in City B with candidate ones, when sample area size equals $4\times4$ km\textsuperscript{2}.}
+\label{fig:city_b_log4}
+\end{figure}
+%
+%\begin{table}
+%	\centering
+%	\caption{Estimated parameters of candidate distributions in Fig. \ref{fig:city_b_log4}.}
+%   \setlength\abovecaptionskip{-2pt}
+%   \setlength\belowcaptionskip{-2pt}
+%	\label{parameters}
+%	\begin{tabular}{l|c}
+%		\toprule
+%		Distribution & Relevant Parameters  \\
+%		\midrule
+%		GP & $a$=0.0488, $b$=3.3502	 \\
+%		\hline
+%		Weibull & $p$=0.7285, $q$=0.8279 \\
+%		\hline
+%		Log-normal & $m$=-0.1835, $n$=1.0483 \\
+%		\hline
+%		$\alpha$-Stable & \tabincell{cc}{$\alpha$=0.6207, $\beta$=1.0000 \\ $\sigma$=0.2053, $\mu$=0.0658} \\
+%		\midrule
+%		Poisson & $\lambda$=1.6759\\
+%		\bottomrule
+%	\end{tabular}		
+%\end{table}
+
+\begin{table}
+\centering
+\caption{RMSE Values after Fitting Candidate Distributions to Empirical One in Three Cities.}
+\setlength\abovecaptionskip{-5pt}
+\setlength\belowcaptionskip{-5pt}
+\begin{tabular}{ccccccc}
+\toprule
+City & Sample\\ Area Size (km\textsuperscript{2}) & $\alpha$-Stable & Poisson & Lognormal & GP & Weibull \\
+\midrule
+\multirow {3}{*}{A} & $3\times3$ & 0.0105 & 0.1214 & 0.0207 &  0.0274 & 0.0361\\
+& $4\times4$ & 0.0177 & 0.1465 & 0.0269 & 0.0339 & 0.0418\\
+& $5\times5$ & 0.0286 & 0.1702 & 0.0293 & 0.0357 & 0.0432 \\
+\midrule
+\multirow {3}{*}{B} & $3\times3$ & 0.0207 & 0.2088 & 0.0658 & 0.0770 & 0.0924 \\
+& $4\times4$ & 0.0279 & 0.2537 & 0.0905 & 0.1017 & 0.1151 \\
+& $5\times5$ & 0.0300 & 0.2913 & 0.0971 & 0.1085 & 0.1217 \\
+\midrule
+\multirow {3}{*}{C} & $3\times3$ & 0.0373 & 0.2332 & 0.0513 & 0.0755 & 0.0910\\
+& $4\times4$ & 0.0451 & 0.2918 & 0.0697 & 0.0948 & 0.1076 \\
+& $5\times5$ & 0.0487 & 0.3405 & 0.0705 & 0.0960 & 0.1064 \\
+\bottomrule
+\end{tabular}%
+\label{tb:rmse}%
+\end{table}%
+
+\begin{figure*}
+	\centering
+    \setlength\abovecaptionskip{0pt}
+    \setlength\belowcaptionskip{-5pt}
+	\subfigure[$3\times3$ km\textsuperscript{2}]
+	{
+		\label{fig:city_b_3}
+		\includegraphics[trim=12mm 0mm 12mm 8mm,width=0.4\textwidth]{./Chapter4_Figures/b_3x3.eps}
+	}
+	\hspace{1em}
+	\subfigure[$4\times4$ km\textsuperscript{2}]
+	{
+		\label{fig:city_b_4}
+		\includegraphics[trim=12mm 0mm 12mm 8mm,width=0.4\textwidth]{./Chapter4_Figures/b_4x4.eps}
+	}
+	\hspace{1em}
+	\subfigure[$5\times5$ km\textsuperscript{2}]
+	{
+		\label{fig:city_b_5}
+		\includegraphics[trim=12mm 0mm 12mm 8mm,width=0.4\textwidth]{./Chapter4_Figures/b_5x5.eps}
+	}
+	\caption{The results after fitting BS density distribution in City B to candidate distributions, when sample area sizes vary.}
+\end{figure*}
+
+Meanwhile, for verifying the general accuracy of candidate distributions, we change the sample area sizes to $3\times3$ and $5\times5$ km\textsuperscript{2} respectively, and plot the related results in Fig. \ref{fig:city_b_3} and Fig. \ref{fig:city_b_5}. Obviously, compared with other candidate distributions, $\alpha$-Stable distribution still provides the most accurate fitting results for the BS density distribution in City B.
+
+\begin{figure}
+\centering
+\setlength\abovecaptionskip{0pt}
+\setlength\belowcaptionskip{-5pt}
+\includegraphics[trim=5mm 0mm 5mm 5mm,width=0.65\textwidth]{./Chapter4_Figures/a_c_4x4.eps}
+\caption{The comparison betwen BS density distribution and $\alpha$-stable distribution in City A and City C, when sample area size equals $4\times4$ km\textsuperscript{2}.}
+\label{fig:4x4}
+\end{figure}
+
+In order to examine the geographical impact on the fitting results, we further analyze the density distribution of BSs in City A and City C using a sample area size of $4\times4$ km\textsuperscript{2}. Due to the factor of geographical irregularity, there is a noticeable gap between the $\alpha$-Stable distribution and the empirical PDF of City A and C in comparison with City B. Nevertheless, as shown in Table \ref{tb:rmse} and Fig. \ref{fig:4x4}, it can be observed that, $\alpha$-Stable distribution could match the practical one in both cities, with RMSE values equaling 0.0177 and 0.0451 respectively and being less than those of other candidate distributions. Moreover, the same conclusions concerned with sample area sizes of $3\times3$ and $5\times5$ km\textsuperscript{2}, could be also testified in Table \ref{tb:rmse}.
+
+Based on the extensive analyses above, we could confidently reach the following remark.
+\begin{remark}
+The spatial pattern of deployed BSs exhibits strong heavy-tailed characteristics. Based on the large-scale identification, $\alpha$-Stable distribution manifests itself as the most precise one. On the contrary, the popular Poisson distribution is an inappropriate model for the BS density distribution, in terms of the root mean square error.
+\end{remark}
+
+\vspace{-5pt}
+\subsection{Conclusion}
+In this letter, based on the practical BS deployment information of one on-operating cellular networks, we carried out a thorough investigation over the statistical pattern of BS density. Our study showed that the distribution of BS density exhibits strong heavy-tailed characteristics. Furthermore, we found that the widely adopted Poisson distribution severely diverges from the realistic distribution. Instead, $\alpha$-Stable distribution, the distribution also found in the traffic dynamics of broadband networks and cellular networks, most precisely match the practical one. Moreover, our study could contribute to the understanding of evolution trend of BS deployment, as well as the impact of human social activities in long term.
+
+Currently, the lack of closed-form for $\alpha$-Stable distribution makes it difficult to reach tractable solutions and might hinder its applications in networking performance (e.g., coverage, rate, etc) analyses. Therefore, we are dedicated to handle the related meaningful yet more challenging issues over applications of $\alpha$-Stable distribution in the future.
+\section{Spatial Density of User Traffic Demands} \label{sec4-trafden}
+Besides the spatial density of BSs, the spatial distribution of traffic demand is also very important for characterizing the operating performance of cellular networks. As we know, the traffic demand and mobile users are coupled together, and are generated through the transmission between BSs. Therefore, even though the real location data is not available for mobile users, we still can use measurements from data traffic to evaluate the distribution of mobile users in cellular networks. In this section, we try to analyze the spatial density of data traffic based on real measurement from a large number of BSs, where the aggregated traffic are collected.
+
+After that, combining BS deployment and traffic demand distribution, we try to uncover the statistical relationship between them. Actually, it's straightforward to connect them together, since BS deployment firstly is based on the traffic volume estimation. For example, operators need to deploy new transmit tower for a newly built residential area. Therefore, after the separate modeling of BS density and traffic density, we conduct the hypothesis test for the linear relationship between these two variables.
+\subsection{Data Description}
+The measurement data used in this paper is obtained from a commercial mobile operator in China. The dataset, collected from two kinds of networks (i.e., 2G and 3G cellular networks), includes traffic and BSs information of City A and City B. The data traffic is measured in the unit of bytes that each BS transmits to the covered users in one-hour interval. BSs information mainly involves geographic location (i.e., longitude, latitude, etc.) and BS type (i.e., macrocell or microcell). The corresponding details are depicted in Table \uppercase\expandafter{\romannumeral1}.
+
+Specifically, we convert the longitude and latitude values of each BS to X, Y coordinates, and plot the actual geographic location on an 2D coordinate plane as shown in Fig. \ref{fig:1} and Fig. \ref{fig:2}. Meanwhile, according to the real city structure, four sample regions named Urban1, Rural1, Urban2 and Rural2 are selected. Obviously, BSs density in rural area is far smaller than that in urban area. Moreover, most BSs in rural area exhibit spatial sparsity. On the contrary, BSs are aggregated densely in urban area, especially in some hotspots.
+\begin{figure}
+\subfigure[BS location (red dot) in City A.]
+{	\centering
+	\includegraphics[trim=0mm 0mm 150mm 0mm,width=0.5\textwidth]{./Chapter4_Figures/city1_new.eps}
+	\label{fig:1}
+}
+\subfigure[BS location (red dot) in City B.]
+{	\centering    
+	\includegraphics[trim=0mm 20mm 0mm 0mm,width=0.5\textwidth]{./Chapter4_Figures/city2_new.eps}
+	\label{fig:2}
+}
+	\caption{Sample regions in blue rectangle are denoted by 'Urban' and 'Rural', respectively.}
+\end{figure}
+
+\subsection{Spatial Distribution of Traffic Demand}
+Humans with similar social behaviours tend to live together, which leads to various traffic hotspots and causes BSs to be deployed densely as clusters in the corresponding areas. \cite{paul2011understanding} pointed out that less than 10\% of the subscribers generate 90\% of the traffic load while 10\% of the base stations carry 50\%-60 \% of the traffic load, which demonstrates significant traffic imbalance and BSs inhomogeneity in cellular networks. Hence, based on the dataset described in Section \uppercase\expandafter{\romannumeral2}-{A}, we aim to reveal the inhomogeneity of BSs and traffic distributions.
+
+Firstly, a square sampling window ${W}$ with size ${S}$, is selected randomly. Then, we compute the number of BSs (${N_{S,\rm{BS}}}$) within this window and that of the aggregated data traffic (${T_{S,\rm{TR}}}$). Thus, one tuple (${N_{S,\rm{BS}}}$, ${T_{S,\rm{TR}}}$) is recorded for each sampling experiment, and the same procedure is repeated 10000 times to obtain enough tuple records. Accordingly, BSs density (${\lambda_{\rm{BS}}}$) and traffic spatial density (${\lambda_{\rm{TR}}}$) are identified as follows:
+
+\begin{equation}
+	\begin{aligned}
+		&{\lambda_{\rm{BS}}}=\frac{N_{S,\rm{BS}}}{S},\\
+		&{\lambda_{\rm{TR}}}=\frac{T_{S,\rm{TR}}}{S}.\\
+	\end{aligned}
+\end{equation}
+
+Considering the real situations that heavy-tailed phenomenon does exist in BSs and traffic spatial distributions, we take $\alpha$-Stable distribution as the fitting candidate. Based on the statement in Section \uppercase\expandafter{\romannumeral2}-{B}, the parameters of $\alpha$-Stable model are firstly estimated and the results are listed in Table \uppercase\expandafter{\romannumeral2}. Afterwards, we use the $\alpha$-Stable model, produced by the aforementioned estimated parameters, to generate some random variable, and compare the induced PDF with the exact (empirical) one. Therefore, after fitting an $\alpha$-Stable distribution to BSs density and traffic spatial density in City A (sampling window size is 3${\times}$3 km\textsuperscript{2}), they both better obey the $\alpha$-Stable distributions obviously (similar to the findings in \cite{crovella1997self}, \cite{zhou2015alpha}). In City B, $\alpha$-Stable distribution is also applicable.
+
+\subsection{Linear Dependence Between BSs and Traffic}
+Geographic limitations, as well as city structure, lead to the differences of population and traffic demand in diverse regions. Accordingly, the mobile operators adapt their BSs to where the subscribers generate the most traffic. In other words, BSs density is closely related to traffic spatial density. In this section, we will check whether there is any intrinsic correlation between the two quantities.
+
+To ease illustration, Urban1 is taken as an representative example. With the sampling window size being 5${\times}$5 km\textsuperscript{2}, then fitting results are depicted in Fig. \ref{fig:6}(b). Evidently, BSs density and traffic spatial density exhibit strong linearity regardless of the BS type. Besides the visual observation, ${R}$-square (${R^2}$) value is also adopted as a performance metric to evaluate the goodness of fit. The closer is the ${R^2}$ value to 1, the better is the goodness of fit. From Table \uppercase\expandafter{\romannumeral3}, the ${R^2} $ value of macrocell and microcell equals 0.9890 and 0.9503, respectively. Therefore, linear regression model is reasonable to characterize the spatial correlation between BSs deployment and traffic spatial distribution, which can be stated as follows:
+\begin{equation}
+{\lambda_{\rm{BS}}} = {{k}{\lambda_{\rm{TR}}+{t}}}.
+\end{equation}
+Here, ${k}$ is a linear slope value that represents the needed number of BSs per unit spatial traffic.
+\begin{figure*}
+	\centering
+	%\setlength\abovecaptionskip{0pt}
+	%\setlength\belowcaptionskip{-5pt}
+	\subfigure[$3\times3$ km\textsuperscript{2}]
+	{
+		\label{fig:6:a}
+		\includegraphics[trim=50mm 0mm 100mm 0mm,width=0.4\textwidth]{./Chapter4_Figures/urban1_3.eps}
+	}
+	\hspace{6pt}
+	\subfigure[$5\times5$ km\textsuperscript{2}]
+	{
+		\label{fig:6:b}
+		\includegraphics[trim=50mm 0mm 100mm 0mm,width=0.4\textwidth]{./Chapter4_Figures/urban1_5.eps}
+	}
+	\hspace{6pt}
+	\subfigure[$7\times7$ km\textsuperscript{2}]
+	{
+		\label{fig:6:c}
+		\includegraphics[trim=50mm 0mm 100mm 0mm,width=0.4\textwidth]{./Chapter4_Figures/urban1_7.eps}
+	}
+	\caption{The fitting results of Urban1, when sampling window size varies.}
+	\label{fig:6}
+\end{figure*}
+
+In order to futher verify the accuracy of using linear regression model, different sampling window size of 3${\times}$3 km\textsuperscript{2} and 7${\times}$7 km\textsuperscript{2} are similarly studied, and the corresponding results are illustrated in Fig. \ref{fig:6}(a) and Fig. \ref{fig:6}(c). Clearly, the sampling window size variation does not violate the linearity. Meanwhile, same tests are carried out in Rural1 and similar conclusions are derived but with different fitting parameters. More detailed numerical information are displayed in Table \uppercase\expandafter{\romannumeral3}.
+
+On one hand, linear regression model keeps better fitting effect no matter the sample region is urban or rural. On the other hand, the key parameter slope ${k}$ is closely associated with the BS type, without dependence on the sampling window size. These findings indicate that BSs deployment is deeply influenced by the subscribers's demand as well as the corresponding traffic dynamics over the space, and imply that BSs density and traffic spatial density have almost identical heterogeneity feature. Interestingly, it is consistent with the findings in Section \uppercase\expandafter{\romannumeral3}-{A} that both BSs deployment and traffic spatial pattern demonstrate the same distributed characteristics (i.e., obeying $\alpha$-Stable distribution), implying the mutual essential interrelation.
+\begin{table}
+\centering
+\normalsize
+\caption{Fitting Parameters of Different Geographic Scenarios.}
+\small
+%\setlength\abovecaptionskip{-5pt}
+%\setlength\belowcaptionskip{-5pt}
+\begin{tabular}{cccccc}
+\toprule
+%\hline
+%\multicolumn{1}{|c|}{Parameters} & Value \\
+\multicolumn{2}{c}{} & \multicolumn{2}{c}{Urban1} & \multicolumn{2}{c}{Rural1}\\
+\midrule
+BS type & Sampling\\ Window Size (km\textsuperscript{2}) & ${k}$ & ${R^2}$ & ${k}$ & ${R^2}$\\		
+\midrule
+\multirow {3}{*}{macrocell} & 3${\times}$3  & 0.0226 & 0.9609 & 0.0258 & 0.9887\\
+& 5${\times}$5 & 0.0241 & 0.9890 & 0.0261 & 0.9970\\
+& 7${\times}$7 & 0.0246 & 0.9977 & 0.0262 & 0.9956\\
+\midrule
+\multirow {3}{*}{microcell} & 3${\times}$3  & 0.3916 & 0.9245 & 0.3161 & 0.8357\\
+& 5${\times}$5 & 0.4029 & 0.9503 & 0.2919 & 0.8739\\
+& 7${\times}$7 & 0.4196 & 0.9638 & 0.3060 & 0.8737\\
+%\hline
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Conclusion}
+
+\begin{figure}
+	\centering
+	\includegraphics[trim=40mm 10mm 100mm 0mm,width=0.65\textwidth]{./Chapter4_Figures/new_arch.eps}
+	\setlength\abovecaptionskip{0pt}
+	\setlength\belowcaptionskip{-5pt}
+	\caption{The real cellular network architecture evolution trend.}
+	\label{fig:7}
+\end{figure}
+
+In actual situations, however, with the increase of traffic load, it is impossible for the number of BSs to grow linearly and infinitely, due to the physical and performance constraints of each generation cellular network. Consequently, there should be a certain critical state for each generation cellular network. That is, the available service capability is pre-determined, and if traffic demand increases continuously, the network evolution would go through a network transition (i.e., upgrading from 2G to 3G, then to 4G). In that regard, an explanatory outline about how cellular network architecture evolves is illustrated in Fig. \ref{fig:7}. Whether it is a 2G era, 3G era or 4G era, linear dependence between BSs density and traffic spatial density always exists but with different slope ${k}$. Surely, the performance improvement of network expects BSs with larger capacity to supply more traffic demand meanwhile requires operators to implement less BSs to serve more subscribers in certain area.
+
+Based on the extensive analyses above, we can reach the following remark.
+\begin{remark}
+BSs deployment (BSs density) and traffic distribution (traffic spatial density) exhibit a strong linear dependence, which suggests that the heterogeneity feature of the two quantities is almost identical. The slope ${k}$ in the linear regression model implies the capacity performance of specific BSs and can be adopted as a valuable performance metric in evaluating the long-term evolution of cellular networks.
+\end{remark}
+\section{Temporal Characterization of Mobile Instant Message} \label{sec4-mim}
+In this section, we turn to the temporal dimension of traffic demand in cellular networks, and takes MIM traffic as an example. As we described in Chapter \ref{Chapter2}, the traffic demand also exhibits clustering nature as spatial dimension. Therefore in our work, after the preliminary examination of data description, we choose several heavy-tailed distribution to conduct the fitting process, in order to find the most appropriate model for temporal distribution of traffic demand.
+Before going to the analysis part, we firstly introduce the data measurement which is from an on-operating cellular networks in China. Different from the individual data, we collect the aggregated traffic volume on the BS scale, which is more coarse-grain but still enough to characterize the temporal properties of cellular networks data traffic.
+\subsection{Data Description}
+MIM services, which solely rely on mobile Internet to exchange information, have quite distinct working mechanisms from traditional short messaging services. One of the prominent differences is that born with standard protocols \cite{institute1985services}, traditional short messaging services could conveniently fulfill timely information delivery and  provision ``always-online" service. However, for mobile Internet in packet switching domain, a TCP connection would release itself if exceeding a TCP inactivity timer. Therefore, as depicted in Fig. \ref{fig:weixinstructure}, besides transmitting (TX) and receiving (RX) normal packets after logging onto a server, MIM services commonly take advantage of keep-alive mechanisms to send packets containing little information periodically and maintain a long-lived TCP connection. Hereinafter, \textit{message} refers to a series of packets transmitted between the user equipment (UE) and the servers of service provider on application layer. Therefore, the messages delivered on every TCP connection constitute the fundamental elements of MIM services, and are named as \textit{individual message-level (IML) traffic} in this paper. Comparatively, when the messages are transmitted through one BS, they become accumulated and could be regarded as the \textit{aggregated traffic} from a slightly more macroscopical perspective.
+
+\begin{figure*}
+\centering
+\includegraphics[width=0.7\textwidth]{./Chapter4_Figures/weixinstructure.eps}
+\caption{An illustration of mobile instantaneous messaging activities.}
+\label{fig:weixinstructure}
+\end{figure*}
+
+In order to build primary models, we collect measurements of the MIM traffic from the on-operating cellular networks. Our datasets collected from the Gb and Gn interfaces \cite{zhou2014understanding}, covering about 15000 GSM and UMTS BSs of China Mobile in an eastern provincial capital within a region of 3000 km\textsuperscript{2}, could be classified as two categories in terms of the corresponding resolutions (i.e., IML traffic and aggregated traffic). The 1-month measurement records of IML traffic are collected from 7 million subscribers, and contain timestamps, cell IDs, anonymous subscriber IDs, message lengths, and message types. Generally, messages are usually transmitted via a TCP connection on both uplink and downlink data channel (as depicted in Fig. \ref{fig:weixinstructure}). However, for ease of analyses, we do not distinguish the directions of messages hereafter. In contrast, the measurement records of aggregated traffic possess coarser resolution than those of IML traffic, and merely specify per 5-minute traffic volume of roughly 6000 BSs in the same city on September 9th, 2014. Fig. \ref{fig:spatialSparsity} plots the snapshots of aggregated traffic at three different moments in a region.
+
+\begin{figure*}
+	\centering
+	\includegraphics[width=0.8\textwidth]{./Chapter4_Figures/spatialSparsity.eps}
+	\caption{The snapshots of aggregated traffic at three different moments in a region containing 23 base stations.}
+	\label{fig:spatialSparsity}
+\end{figure*}
+\subsection{Fitting and Evaluation}
+In this section, from the perspective of one whole BS, we examine the fitting results of aggregated traffic within one BS to candidate distributions. Fig. \ref{fig:onecellstable} presents the corresponding PDF comparison between the simulated results and the real aggregated traffic in one randomly selected BS. By taking advantage of a similar methodology, Fig. \ref{fig:onecellstable} implies the traffic records in these selected areas could be better simulated by $\alpha$-Stable models. Similarly, it shows $\alpha$-Stable models lead to better fitting accuracy in terms of RMSE. Furthermore, Fig. \ref{fig:aggregatedTraffic}(a)$\scriptsize{\sim}$(d) verify the fitting preciseness of empirical data to $\alpha$-Stable models in another four randomly selected BSs.
+Fig. \ref{fig:aggregatedTraffic}(e) shows the cumulative distribution function (CDF) of preciseness error for all the cells after fitting $\Psi(\omega)$ with respect to $\ln (\omega) $ to a linear function, and demonstrates there merely exists minor fitting errors. In other words, according to the statements previous, Fig. \ref{fig:aggregatedTraffic}(e) implies that the aggregated traffic possesses the property of $\alpha$-stable models. Given the previous results, it safely comes to the following remark.
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\textwidth]{./Chapter4_Figures/onecellstable.eps}
+	\caption{Fitting results of candidate distributions to empirical aggregated traffic in one randomly selected BS.}
+	\label{fig:onecellstable}
+\end{figure}
+
+\begin{figure}[htp]
+\centering
+\includegraphics[width=0.7\textwidth]{./Chapter4_Figures/aggregatedTraffic.eps}
+\caption{(a)$\scriptsize{\sim}$(d): Fitting results of $\alpha$-stable models to empirical aggregated traffic in another two randomly selected BSs; (e): The preciseness error CDF for all the cells after fitting $\Psi(\omega)$ with respect to $ \ln (\omega) $ to a linear function; (f): The PDF of $\alpha$ estimated for aggregated traffic in different cells.}
+\label{fig:aggregatedTraffic}
+\end{figure}
+\begin{remark}
+Due to their generality, $\alpha$-Stable models are most suitable to characterize the aggregated traffic in cellular networks. Together with previous findings in fixed broadband networks \cite{gallardo2000use,xiaohu2004testing}, $\alpha$-Stable models are proven to accurately model the aggregated traffic from cellular access networks to core networks.
+\end{remark}
+
+On one hand, the universal existence of $\alpha$-Stable models implies and contributes to understanding the intrinsic self-similarity feature in MIM traffic \cite{crovella1997self}. On the other hand, the reasons that MIM traffic universally obeys $\alpha$-Stable models can be explained as follows. Section \ref{sec:iml} unveils that the length of one individual MIM message follows a power-law distribution. Meanwhile, the distribution of aggregated traffic within one BS can be regarded as the accumulation of lots of IM messages from diverse UEs. Moreover, the analysis results of inter-arrival time imply frequent packet transmission. Therefore, according to the generalized central limit theorem, the sum of a number of random variables with power-law distributions decreasing as $\arrowvert x \arrowvert ^{-\alpha-1}$ where $0 < \alpha < 2$ (and therefore having infinite variance) will tend to be an $\alpha$-Stable model as the number of summands grows. Interestingly, Fig. \ref{fig:aggregatedTraffic}(f) shows that the PDF of parameter $\alpha$ obtained by fitting aggregated traffic in different cells to $\alpha$-Stable models, and reflects the fitting values of $\alpha$ mostly fall between 1.136 to 1.515, while the slope of power-law distribution for IML traffic is 2.407. These fitting results prove to be consistent with the theory from the  generalized central limit theorem \cite{kolmogorov1968limit}.
+\begin{remark}
+The aggregated traffic within one BS, following $\alpha$-Stable models, can be explained as the accumulation of a number of power-law distributed messages.
+\end{remark}
+\subsection{Conclusion}
+In this paper, we investigated the traffic characteristics of MIM services from two different viewpoints. For IML traffic, we showed that message length and inter-arrival time better follow power-law distribution and log-normal distribution, which are quite different from the recommendation by 3GPP. For aggregated traffic within one BS, we revealed the accuracy of applying $\alpha$-Stable models to characterize this statistical pattern, and extended the suitability of $\alpha$-Stable models for traffic in both fixed core networks and cellular access networks. Besides, following the generalized central limit theorem, we built up the theoretical relationship between distributions of IML and aggregated traffic. These heavy-tailed traffic models of MIM service could contribute to the design of more efficient algorithms for resource allocation and network management in cellular networks.
+
+In this paper, we characterized the preciseness of modeling IML traffic and aggregated traffic by power-law distribution and $\alpha$-Stable models respectively, depending on extensive traffic records-based fitting processes. However, it is still worthwhile to mathematically verify these remarks, and try to establish the mathematical relationship more rigorously.
+\section{Discussion and Conclusion} \label{sec4-concl}
+In this chapter, we try to characterize the statistical distribution of BS deployment and traffic demand, in both spatial domain and temporal dimension.
+\subsection{Conclusion}
+Firstly, we investigate the spatial density of BSs, in order to characterize the variation of BS deployment across the whole cellular networks. In detail, after revealing the spatial clustering nature of BS deployment, we choose several heavy-tailed distributions to be fitted to the real data along with the traditional exponential distribution. Based on the RMSE performance metric, we find that $\alpha$-Stable distribution is the most accurate model for the BS density, which differs with the traditional assumption that BSs tend to be deployed independently.
+
+Secondly, we turn to the spatial distribution of traffic demand in cellular networks. Similar with the case of BS deployment, the spatial density of traffic volume on cell level also exhibits heavy-tailed property. Therefore, based on our preliminary assumption that the traffic density within one cell is invariant, we try to characterize the traffic density distribution across the whole networks. After fitting process and performance evaluation, we again reveal the accuracy of the $\alpha$-Stable distribution for this scenario.
+
+Thirdly, due to the same features of spatial density for BS deployment and traffic demand, we try to investigate the quantitative relationship between those two variable. Based on the same data set, we find out that there is kind of linear dependence between BS and traffic density. That's to say, where there are more BSs, there tends to be more traffic demand, or vice versa. Indeed, after further analysis, the slope between those two are found to be constant related to the technology development, which is quite reasonable.
+
+Besides the spatial analysis, we also conduct the temporal analysis of cellular traffic, and taking the popular MIM traffic as an example. For each sampled BS, we conduct the traffic density characterization on the time scale, and again find that the $\alpha$-Stable distribution is most consisted with the collected traffic volume.
+\subsection{Connecting the Dots}
+After introducing the fitting results on different dimensions, we come to wonder why $\alpha$-Stable distribution is the most accurate model in different cases. Is there any internal causes for these results? Although the clustering nature is revealed in different dimensions, there are different statistical distribution for characterizing the densities. Within those candidate models, $\alpha$-Stable distribution is the most general one, which covers the Gaussian distribution, Levy distribution and Cauchy distribution as special cases with specific parameters.
+
+Indeed, like Gaussian distribution, $\alpha$-Stable distribution can be derived from a so-called generalized central limiting theorem where the individual variables follows a variance unlimited power-law distribution. In our cases, the traffic volume of a specific BS is aggregated from numbers of mobile users, whose traffic usage pattern diversifies. Therefore, if the user traffic volume on time scale can be verified to be power-law distributed, then the $\alpha$-Stable distribution of aggregated traffic volume is acceptable.
+
+In the spatial case, the BS density exhibits heavy-tailed phenomenon, where small part of regions covers large part of BSs. Besides, the traffic density for different cells also tends to be highly skewed, where dense urban areas have very high traffic density while rural areas are shown to be light loaded. In order to explain that, we first assume that the spatial density of BS deployment and traffic demand are linear dependent, which is quite reasonable considering the deployment strategy of telecommunication operators. Therefore, the problem why $\alpha$-Stable distribution suit for the traffic density and BS density reduce to the generation of aggregated traffic in single BS. Actually, the traffic volume of a BS is consisted of lots of users within the coverage area. Thus, the summation of BS's volume along a specific time scale can be seen as the sum of each users along this time scale, for example, one day or one week. As we introduced in Chapter \ref{Chapter2}, the usage pattern of an individual varies across the population, thus the variance of the individual traffic can be assumed to be large enough. According to the generalized central limiting theorem, this assumption comes to the $\alpha$-Stable distribution of aggregated volume on the BS level. After dividing the areas of coverage, the traffic density can be derived to be the same distribution with scaled parameters.
+
+Therefore, from our analysis, the $\alpha$-Stable distribution for BS density and traffic density are rooted in the individual traffic usage of mobile users, which need to be assumed to be power-law distribution. However, due to privacy issue, it's not accessible to obtain individual traffic record from cellular networks. This situation leads to further more fine-grained traffic analysis of mobile user.

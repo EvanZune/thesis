@@ -1,0 +1,175 @@
+\chapter{Spatial Distribution of Base Stations in Cellular Networks} % Main chapter title
+
+\label{Chapter3} % For referencing the chapter elsewhere, use \ref{Chapter1}
+
+\lhead{Chapter 3. \emph{Spatial Distribution of Base Stations in Cellular Networks}} % This is for the header on each page - perhaps a shortened title
+Cellular networks provide services through the wireless link between the base stations and mobile users, which is the most fundamental and challengeable part of the whole system. In the wireless access network, constrained communication resources like frequency and power, are partitioned to different BSs and mobile users partly based on the channel state and interference level which is highly correlated to the location of BSs and users. That's to say, the spatial properties of cellular networks play an essential role in the wireless communication service.
+
+Different from the traffic demand and content request, the infrastructure of cellular networks lack the temporal properties, and only exhibits the spatial characteristics. Thus, without mentioning the clustering nature on temporal and content dimension, in this chapter, we focus on the spatial distribution of BSs in cellular networks.
+
+The following contents will be divided into five sections, the first one will be a introductory section which includes the motivation and overview of this work, and then the detailed real data description will be present in Section 2. After that, we will introduce the point process models and the evaluation metrics in Section 3, which be followed by the fitting process description and accuracy performance examination in Section 4. In detail, in the modeling processes across this chapter, we investigate both the urban and rural districts, the macro and micro BSs, small regions and large areas, the singular data sample and multiple large-scale samples. After all these processes, we conclude this chapter and indicate the uncovered problems, which leads to the works in next chapter.
+\section{Introduction}
+As we said, the spatial structure of BSs has a great impact on the performance of cellular networks, since the received signal strength varies depending on the distance between transmitter and receiver \cite{haenggi2009stochastic}. Moreover, interference characterization is very complicated and challenging due to path loss and multipath fading effect, in particular for a heterogeneous networking scenario consisting of different types of BSs. In order to evaluate the network performance more accurately and tractably, it is essential to obtain realistic spatial models for BSs deployment in cellular networks\cite{andrews2010primer}.
+
+This introductory section will include three parts. Firstly, we will introduce the background of this work, why it's important and how to deal with it. Secondly, the related works of this literature are presented, each with its pros and cons. Finally, we put forward our approach and contributions in this field.
+
+\subsection{Background}
+Basically, the wireless signal attenuated as propagated in the air between transmitters and receivers, due to the natural properties of electromagnetic waves. Especially for cellular networks, where the coverage need to be maintained for nearly every regions and most of the users, the transmitted signals experience even more complicated variation. Beside the multipath phenomenon in wireless transmission of cellular networks, the distance-based path loss effect contributes to the signal propagation most significantly. The deployed base station can only serve a range of mobile users within the coverage area, due to the signal strength decreases as the distance between user and BS increases. Therefore, the BS location play a key role in the coverage quality of cellular networks, since it determines the capacity of the deployed cell. In this term, the knowledge of the spatial distribution of BSs is a key driver for cellular network capacity enhancement.
+
+Besides, as the traffic demand increases exponentially, the cellular networks are experiencing a huge transform from uniform deployment to heterogeneous layout, i.e., from coverage-driven macrocells to capacity-driven small cells. Although this densification method can improve the throughput of overall network by increasing the frequency reuse factor, it inevitably enhances the interference level of each connection since there are more interferers around now. To characterize the interference more accurate thus make other interference-cancelation technologies possible to work, it becomes more essential to get full knowledge of the spatial distribution of BSs. Besides, in addition to the non-uniform nature of traditional BSs' distribution, that kind of heterogeneous trend even complicates the spatial modeling of BS locations more.
+
+In terms of this necessity and complexity, it's important to conduct a comprehensive experiment on the spatial distribution of BSs in cellular networks, making use of large amount of real data and realistic mathematical spatial point process models. Before presenting our works on this topic, we would like to introduce the related works in this literature which can help us understand the difficulties and trade-offs in this problem.
+
+%This section aims to introduce the common point process models of BSs' spatial distribution, after which we will have a detailed examination of these models based on massive real data from on-operating cellular networks.
+
+\subsection{Related Works}
+By far, hexagonal grid model has been a popular approach to model BS locations in academia and industry due to its simplicity and regularity \cite{rappaport1996wireless}. Although a little bit toosimple, this model captures several key aspects of cellular networks and has been an industry standard since cellular networks were first conceptualized. However, despite its simplicity, it is surprisingly intractable, especially for downlink analysis, and is useful mainly for the system level simulations \cite{chenand2011system}. Furthermore, as the cellular networks have evolved for decades, the real BSs deployment is significantly influenced by factors like population and geography, which makes the regular grid assumption more and more impractical.
+
+To solve this problem, in recent years, Poisson point process (PPP) has been proposed as an effective way to model various network structures \cite{haenggi2009stochastic,andrews2010primer,andrews2011tractable,dhillon2012modeling}. Different with the hexagonal grid model, the PPP models the BSs in a stochastic way. That's to say, it doesn't specify the exact position for each BS, but provide a spatial realization on a sample area level. Besides, the number of BSs in PPP is not specified, either, but comes from a Poisson distribution whose mean indicates the density of BSs in the sample region. As a baseline role, PPP model can provide tractable and useful results for performance evaluation in both one-tier and multi-tier networking scenarios \cite{cheung2012throughput,chandrasekhar2009spectrum}. Also, it helps to derive the close-form performance characterization of many new proposed technics for radio access networks \cite{yang2016analysis,huang2014enabling}. However, it may not be the most suitable one to model BS locations as researchers still hardly reach a consensus on PPP's performance to model the real deployment. For example in \cite{andrews2011tractable} and \cite{lee2013stochastic}, the authors observe inconsistent coverage probability performance of the PPP model when modelling the real BS locations data from different cities of the world. Given these conflicting results above, it is still worthwhile to conduct more comprehensive investigation to provide trusty conclusion, and take more realistic models into consideration.
+
+Generally, in stochastic geometry literature, despite of PPP's mathematical perfection, there are plenty of choices including repulsive and clustered point processes \cite{chiu2013stochastic} to model various spatial patterns. Repulsive point process avoids the included nodes to be too near from each other, and clustered point process put the nodes together which leaves a inhomogeneous appearance. For example, in \cite{riihijarvi2010modeling}, the authors discover that the Geyer saturation process, which takes account of pairwise interaction between points, can accurately reproduce the spatial structure of various wireless networks. More specifically in cellular networks, Geyer saturation process and its special case Strauss process are utilized to model macrocellular deployment for different scenarios in \cite{taylor2012pairwise}. Besides, Poisson hard-core process (PHCP) is also proposed to model BS locations in \cite{guo2013spatial}, and Poisson cluster process is verified to be able to model BSs deployment in urban areas \cite{lee2013stochastic}. Similarly, the Ginibre point processes and determinantal point processes have been investigated as suitable models for wireless networks with nodes repulsion \cite{deng2014ginibre,li2014fitting}, obtaining a tentative compromise between accuracy and tractability. Very recently, the $\alpha$-Stable distribution \cite{zhou2015alpha} is proved as an accurate model for characterizing the clustering nature of BS density in cellular networks. In summary, various point processes have been employed to model BSs spatial structure based on different data sets from cellular networks worldwide \cite{elsawy2013stochastic}, but the conclusion is still indistinct so far in this literature, due to the considerable insufficiency of the amount of real data samples and the significant disparity between all these different cellular networks.
+
+Indeed, the actual spatial distribution of BSs in cellular networks is far more complicated than what is commonly expected. Firstly, various regions such as rural and urban areas are deemed as distinctively different cases, owing to population density divergence and disparate traffic demands \cite{taylor2012pairwise}. Secondly, because of the practical limitation in BSs site selection, the human factor and geographical effect have significant impact on BSs spatial distribution which may be directly invisible for expressing the spatial pattern. Thirdly, for heterogeneous multi-tier cellular networks, each tier differs in transmit power and coverage area. As a result, the BS locations in each tier may have a significant correlation in order to mitigate inter-tier interference \cite{cho2013energy,deng2014heterogeneous}.
+
+For example, as cellular networks have been undergoing an evolution towards heterogeneous networking architecture. System performance evaluation and resource allocation become more complicated for multi-tier scenario, since each tier may differ in transmit power, coverage area and supported rate\cite{dhillon2012modeling}\cite{cheung2012throughput}. This lasting trend highlights the importance for hierarchical spatial analysis of multi-tier structure. Therefore, considering the inherent differences in functionality and networking feature, the the spatial structures of macrocell and microcell deployment may have different layouts. Actually, macrocell BSs are neither too close nor too far away from each other in order to satisfy coverage requirement and decrease inter-cell interference. Therefore, there is repulsion between macrocell BSs. On the other hand, microcells are usually deployed to diminish coverage hole and offload network traffic, which always exhibits aggregation feature. So microcell BSs would be clustered. These facts provide reasonable basis to adopt Gibbs and Neyman-Scott processes\cite{chiu2013stochastic} for modeling macrocell and microcell deployment, respectively.
+
+Besides the functional difference between BSs, the geographical factor also gives rise to the disparity of BS spatial distribution. For example, BSs' distribution in urban areas are much denser than that of rural areas, and BSs' density in mountain or river areas are much less than that in flat land. Those kinds of variety highlight the importance of massive data in the empirical analysis of spatial modeling of BS distribution in cellular networks, which leads to our approach and contributions in next subsection.
+
+\subsection{Our Approaches and Contributions}
+
+\subsubsection{Our Approaches}
+In order to solve these challenging problems, massive real data on BS locations is essential and is able to provide a holistic view on the spatial distribution characterization. Moreover, due to its complexity, a reasonable proposition for BSs spatial modeling may be that different point process models work for different dimensions, such as rural and urban areas in human dynamics dimension or macrocells and microcells in BS function dimension \cite{wu2014spatial,zhou2014two}.
+
+Actually, there are three steps to forward in order to complete the realistic spatial modeling process, i.e., the data collecting, the model selection and the fitting procedure. After collecting massive real data from on-operating cellular networks, we need to choose suitable point process models for these two-dimension data sets, based on preliminary examination of the data samples. Then, the chosen models are fitted to the real data, and specific parameters and performance metrics can be derived for the final accuracy evaluation. For the data collecting part, since we are dealing with the BSs in cellular networks, large-amount of real BS locations data from the largest operator in China is gathered to conduct this large-scale experiment. Besides, for the point process model part, we dive into the literature of stochastic geometry, and select complete and suitable sets of candidate models for the real BS deployment. After that, different types of modeling metrics are adopted for the performance evaluation, namely  classical or statistical metrics and network-layer performance metrics.Therefore, for different data sets, we conduct a same fitting process with same set of candidate point process models, and then determine the most accurate model based on the same evaluation metrics. As a matter of course, we can achieve a reasonable and realistic modeling results for various data samples and different dimensions of BS description.
+
+In addition to the real data sets used in BSs spatial characterization, the statistical modeling process itself entails a two-fold preparation. The first component is the point process selected to be fitted to the point pattern of real data, the other one is the performance evaluation metrics utilized for model hypothesis testing. Actually, in some cases, BSs are neither too close nor too far away so as to guarantee full coverage and mitigate inter-cell interference. This kind of phenomenon provides a reasonable basis for the utilization of Gibbs point processes, which can describe the repulsive property. Besides, in some dense urban areas, BSs tend to be aggregately distributed in order to provide high capacity requirement for more subscribers, thus Neyman-Scott point processes are employed to capture this phenomenon properly. Additionally, Gibbs point processes and Neyman-Scott point processes, together with PPP, represent all three components of point processes, i.e., repulsive, clustered, and completely random ones. Thus, in terms of accuracy and completeness, PPP, Gibbs point processes and Neyman-Scott processes \cite{chiu2013stochastic} are adopted as candidate models for BSs spatial characterizing in this work.
+
+Moreover, two types of metrics categorization, namely classical or statistical metrics and network-layer performance metrics, are adopted for hypothesis testing. The widely applied statistical metric is Ripley's $K$-function or its transformation $L$-function \cite{ripley1977modelling}, while the coverage probability is the most popular metric of performance evaluation due to its fundamental usage in wireless network analysis. Details can be found in following section of evaluation metrics.
+
+Given these spatial model candidates and evaluation metrics, we provide the spatial modeling of all the BSs from different perspectives. Specifically, we divide the overall BSs dataset into disjoint subsets according to geographical factor (e.g. rural or urban areas) and functional type (macrocells and microcells), respectively. To be comprehensive, we go further to test the distribution properties of BSs from each tier separately. Combined with the detailed analyses in regard to different tiers of BSs, the spatial modeling considering social influence such as population and service demands in rural and urban areas deserves to be investigated for expressing the deployment heterogeneity of cellular networks in various dimensions.
+
+\subsubsection{Our Contributions}
+The objective of this paper is to obtain realistic spatial models for BS locations in cellular networks. Compared with the existing literature, the merits in our approach are three-fold. Firstly, our work is based on massive real BSs deployment data from one of the largest telecommunications operator in China, and thousands of geographical regions are randomly selected to identify different point processes. The extremely huge amount of data source ensures the accuracy, reliability and universality of the resulting models. Secondly, all the representative models including PPP, Gibbs point processes and Neyman-Scott point processes are adopted as candidates in the model verification, and different models are compared in term of modeling accuracy. Thirdly, separate modeling is conducted for different tiers and different regions within the heterogeneous cellular networks. To the best of our knowledge, it is the first time that multiple tiers are independently analyzed based on massive real data in order to obtain architecture-oriented spatial models.
+Accordingly, our technical contributions in this paper are multi-fold as well.
+\begin{itemize}
+\item The accuracy of the enormously used PPP model in cellular networks is questioned by our large-scale identification based on real data measurements. This result will strongly challenge the popular adoption of PPP model in networking performance evaluation.
+\item The general clustering nature of BS locations is revealed with random and massive verifications, and the degree of clustering varies significantly for BSs in different areas or different tiers.
+\item In general, it's verified that Neyman-Scott point processes have superior modeling accuracy than Gibbs point processes, while all of them are not sufficient for realistic characterization.
+\end{itemize}
+
+Following, we will introduce the real data set first, including small sample regions and large coverage areas.
+%The related work above have all adopted one or both of these two metrics, according to which accurate models is obtained through the comparison of the metrics between the simulated point pattern and the actual planning. Even though coverage probability gives an overall description of communication quality on the users' side, there is no insight into the BS planning configuration such as the frequency reuse, the transmitting power. Indeed, the number of neighboring BS for each cell is a significant reference, because it has a great connection with the reuse factor in order to mitigate interference. In this paper, we calculate this quantification for all BSs across the network and compare with the simulated spatial models on this metric. The results may give us an insight into the connection between the BS deployment and the network resource utilization.
+\section{Real Data Description}
+In order to obtain an accurate and realistic point process to model the real deployment of BSs, our work is based on massive amount of real data including all BS-related records from the largest cellular networks operator in an advanced eastern province of China with resident population up to 54.77 million or 526 persons per square kilometer. Within this 104,141 square kilometers province, the data set includes 47663 base stations of GSM cellular networks with more than 40 million subscribers been served, and each record of the BS contains the corresponding coverage area, location information (i.e. longitude, latitude, etc.) and BS type informantion (i.e. macrocell or microcell) and so on.
+
+Based on the coverage area and location information, we can divide the dataset into disjoint subsets. For example, we obtain the subsets for urban areas and rural areas, by matching the geographical feature with local maps. In this paper, for representativeness and integrality, we mainly consider three typical urban areas and one large rural area to examine the accuracy of various candidate models for BS locations spatial distribution. The population of these selected urban areas are three-layered, ranging from 1 million to 5 million, covering the so-called metropolis city (city A), big city (city B)and medium city (city C). Two of them (city B, C) are coastal cities, while the other one (city A) being inland city. Besides, the rural area covers a large portion of the central part in this province with more expansive bound. The detailed information of these selected areas are summarized in Table \ref{RealDataInformation}.
+
+From Table \ref{RealDataInformation}, we can observe that the BSs deployed in urban areas are much more denser than those of the rural area, so does the percentage of microcells' number in all BSs. As following, we will introduce real data from these sample regions in detail.
+
+\begin{table}[!htb] \label{RealDataInformation}
+  \centering
+  \caption{Information of Selected Large Regions.}
+    \begin{tabular}{cccccc}
+    \toprule
+    Region & \tabincell{cc}{Area \\ (${km}^2$)} & BS number & Macrocell & Microcell & \tabincell{cc}{BS density \\ (${km}^{-2}$)}\\
+    \midrule
+    City A & 60$\times$40 & 6251  & 3513  & 2738  & 2.604 \\
+    City B & 40$\times$40 & 977   & 677   & 300   & 0.611 \\
+    City C & 30$\times$50 & 1911  & 1538  & 373   & 1.274 \\
+    Rural  & 200$\times$200 & 12691 & 11603 & 1088  & 0.317 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:areas}%
+\end{table}%
+
+\subsection{BS Locations in Large-scale Areas}
+As described, within a prosperous province in China, we collected large amount data of BS locations from the largest telecommunication operator. The description of those selected representative large regions (including 3 cities and 1 rural area) are presented in Table \ref{RealDataInformation}. As we proposed, the modeling procedure of this work will be conducted in different dimensions, from urban area to rural area and from macrocells to microcells. Besides, the experiment will also include specific sample examination and large-scale identification, which takes small sample regions and large sample areas into consideration, respectively. Therefore, in this subsection, we will firstly present the BS locations in large-scale areas within the whole province we investigate.
+
+\subsubsection{BSs in Urban Area}
+As displayed in Table \ref{RealDataInformation}, there are 3 big cities in the whole data set. The areas, the number of macrocells and microcells, and corresponding densities are all given. Here, we take part of city A as an example to show the spatial distribution of BSs in urban areas, as depicted in Fig. \ref{c3-hangzhou}.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[trim=0mm 0mm 10mm 8mm,clip,width=0.45\textwidth]{./Chapter3_Figures/hangzhou.eps}
+\caption{BS locations in city A.}
+\centering
+\label{c3-hangzhou}
+\end{figure}
+
+Actually, city A is the capital of our investigated province with area 16,596 square kilometers, and its population is more than 9 million. As we can see in the figure, city A district contains dense urban areas and suburban areas, which can be easily noticed from the BS density variation across this figure. In Fig. \ref{c3-hangzhou}, we sample a 60$\times$40 rectangular region (2400 square kilometers) to represent the BS distribution in city A. This sampled region contains 6251 BSs in total, where 3513 of them are macrocells with left 2738 ones microcells, and the density reaches 2.604 per square kilometers. Besides, city B and C are also large-scale urban area samples in our analysis, and all of them will be investigated in the following large-scale random identification process.
+
+\subsubsection{BSs in Rural Area}
+Like urban areas, real data from rural areas are also essential parts for the realistic modeling of BS locations. In Fig. \ref{c3-rural}, we depict a large sample region from the rural area, which is mainly located in the central part of our investigated province. The rural region we selected are 200$\times$200 square kilometers, which is much broader than the urban ones. In this region, the total number of BSs is 12691, and most of them are macrocells (11603), which is better for the coverage performance in rural areas.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[trim=0mm 0mm 10mm 8mm,clip,width=0.4\textwidth]{./Chapter3_Figures/rural.eps}
+\caption{BS locations in the large rural area.}
+\centering
+\label{c3-rural}
+\end{figure}
+
+Combine urban areas and rural areas in the modeling process together, we can get to the difference of BS spatial distribution for areas with distinctive population and geography.
+\subsubsection{Macro BS Locations}
+
+\subsubsection{Micro BS Locations}
+\subsection{Small-region Samples of BS Locations}
+Besides large areas, small-region samples provide another description of BS locations on a different scale. Here, we sampled two regions to reveal the spatial distributions on a relatively smaller scale, where one is from the urban area (city A), and the other one is from the rural area.
+\subsubsection{Sample Region in Urban Area}
+As we know, the BS distribution in urban areas is much denser than that in rural areas. Therefore, we decide to sample a small region from urban area, namely $3\times3$ $km^2$ from city A, as depicted in Fig. \ref{c3:dense1}. This selected urban region contains 249 BSs including 84 macrocells and 165 microcells, while the high percentage of microcells' number reflects the great capacity demand in this dense urban region.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.5\textwidth]{./Chapter3_Figures/dense1.eps}
+\caption{BS locations in a chosen dense urban region of city A, the blue dot represents the macro BS while red cross is the micro BS.}
+\label{c3:dense1}
+\end{figure}
+
+\subsubsection{Sample Region in Rural Area}
+Unlike the sample region from urban area, we select a much broader region in rural area. Since the BS density is relatively smaller, and the number of BS need to be large enough to conduct the modeling process, we choose a $20\times20$ $km^2$ region from the broad rural area as a rural sample. As depicted in \ref{c3:rural1}, this selected rural area contains 79 BSs with only 5 microcells. The low density of BSs distribution and even fewer microcells in rural area express the relatively high requirement for network coverage rather than capacity enhancement.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.5\textwidth]{./Chapter3_Figures/rural1.eps}
+\caption{BS locations in a chosen rural region from a central inland part of the province.}
+\label{c3:rural1}
+\end{figure}
+
+\subsubsection{Macro BSs in Sample Region}
+\subsubsection{Micro BSs in Sample Region}
+
+\section{Candidate Models and Evaluation Metrics}
+After presenting the real data sets for our modeling process, next step is to introduce the point process models and the evaluation metrics for the fitting performance. In this section, we will first give a brief introduction of point process models in stochastic geometry, including their difference and similarities. After that, we will introduce several common evaluation metrics for our fitting procedure, including traditional statistical metrics and cellular networks performance metrics.
+\subsection{Spatial Point Process Models}
+The most basic component in stochastic geometry is the spatial point processes, within which different models will result in different network topologies. Intuitively, point process (PP) is a collection of points distributed in a selected window on the plane. More formally, a point process can be interpreted as a measurable mapping from a certain probability space to the space of point measures. In general cases, the point process can be represented as a countable random set $\Phi=\{z_1,z_2,...\}$, of which the intensity measure $\Lambda$ of $\Phi$ is defined as $\Lambda(B)=\mathbb{E}\{\Phi(B)\}$, where $B$ is a sub region of $\Phi$ and $\Phi(B)$ denotes the number of points in $B$.
+There are many kinds of point processes, such as the PPP, Hard-core processes, Gibbs processes, Neyman-Scott processes and the Cox processes \cite{chiu2013stochastic, neyman1972processes}. They can also be categorized into three sets, the PPP, regular processes and clustered processes. Among the regular point processes where repulsion is exhibited, Gibbs processes take a large part of them. Neyman-Scott process is a very typical class in clustered point processes, where there is attraction between points. Since real BSs deployment may be regular or clustered across the whole networking plane, and different regions may have different distribution patterns, we consider all kinds of the above models in this paper in order to learn the comparatively suitable point process model. In order to make the description more precisely, a tree structure between these different point process models are given in Fig. \ref{fig:structure}.
+\subsubsection{Completely Random Processes}
+
+\subsubsubsection{Poisson Point Processes}
+Poisson point process is the complete random point process where there is no repulsion or attraction between any points. Let $\Lambda$ be a locally finite measure on some metric space $\mathbf{E}$, a point process $\Phi$ is Poisson on $\mathbf{E}$ if:
+(1) For every bounded closed set $B$, $\Phi(B)$ follows a Poisson distribution with mean $\lambda|B|$, where $\lambda$ is the density of this point process.
+(2) For disjoint closed subsets $B_1$, $B_2$,...,$B_n$, the number of points in each subset $\Phi(B_1)$, $\Phi(B_2)$,..., $\Phi(B_n)$ is independent.
+\subsubsection{Regular Point Processes}
+Among regular point processes where there is repulsion between nearby nodes, Gibbs point processes are important branches in the stochastic geometry literature. They are also referred as Markov point processes, because their property can be characterized by probability density, which is helpful in fitting and simulation using Monte Carlo method. Without loss of generality, we consider a point pattern $\mathbf{z} =\lbrace z_1,z_2,...,z_{n(\mathbf{z})}\rbrace $ placed in a bounded window $W$, where $n(\mathbf{z})$ is the number of points in $\mathbf{z}$. For simplicity, only pairwise interaction is considered here, and its probability density function (PDF) can be defined as:
+\subsubsubsection{Strauss Point Processes}
+\subsubsection{Clustered Point Processes}
+
+\subsection{Performance Metrics for Fitting Evaluation}
+\subsubsection{Mathematical Metrics from Point Process Theory}
+\subsubsection{Service Performance Metrics in Cellular Network}
+
+\subsection{Fitting Methods and Parameter Description}
+
+\section{Fitting Results and Identification Process}
+\subsection{Case Studies for Different Scenarios}
+\subsubsection{Spatial Pattern of BSs in Urban Areas}
+\subsubsection{Spatial Pattern of BSs in Rural Areas}
+\subsubsection{Spatial Pattern of Macro BSs}
+\subsubsection{Spatial Pattern of Micro BSs}
+\subsection{Large-scale Spatial Modeling Identification}
+\subsubsection{Large-scale Examination of Urban Areas}
+\subsubsection{Large-scale Examination of Rural Areas}
+\subsubsection{Large-scale Examination of Macro BSs}
+\subsubsection{Large-scale Examination of Micro BSs}
+
+\section{Conclusion and Discussion}
